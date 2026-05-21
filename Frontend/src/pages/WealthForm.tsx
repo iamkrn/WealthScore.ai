@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import FormInput from "../components/ui/FormInput";
+import Navbar from "../components/Layout/Navbar";
+import Footer from "../components/Layout/Footer";
 
 export default function WealthForm() {
 
@@ -53,10 +55,14 @@ setForm((prev) => ({
   };
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 py-10">
-
+  
+    
+    <div className="min-h-screen bg-black text-white ">
+       
+      <Navbar/>
+   
       {/* Title */}
-      <h1 className="text-2xl md:text-4xl text-center font-semibold mb-2">
+      <h1 className="text-2xl md:text-4xl text-center font-semibold mt-9 mb-2">
         Let’s Personalize Your Wealth Score
       </h1>
 
@@ -86,7 +92,7 @@ setForm((prev) => ({
         {/*  Personal Info */}
         {step === 1 && (
             <Section title="Personal Information">
-          <FormInput label="Age" value={form.age} placeholder="Enter you age" onChange={(v)=>handleChange("age", v)} />
+          <FormInput label="Age" value={form.age}  onChange={(v)=>handleChange("age", v)} />
           <FormInput label="Monthly Income" value={form.income} onChange={(v)=>handleChange("income", v)} />
           <FormInput label="Marital Status" value={form.marital} onChange={(v)=>handleChange("marital", v)} />
           <FormInput label="Dependents" value={form.dependents} onChange={(v)=>handleChange("dependents", v)} />
@@ -170,9 +176,15 @@ setForm((prev) => ({
 
         </div>
             </div>
+            <Footer/>
             </div>
-        );
+  
+
+        
+        
+      )
         }
+        
 
 /*  Section Wrapper */
 function Section({
@@ -191,4 +203,5 @@ function Section({
       </div>
     </div>
   );
+  
 }
