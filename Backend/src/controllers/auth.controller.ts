@@ -12,14 +12,16 @@ try {
         // checking if fields
         if(!name || !email || !password ){
              res.status(400).json({message: "please required fields"})
+             return
         }
 
         // checking existing user
         const existingUser =  await User.findOne({email})
         if(existingUser){
             res.status(400).json({message: "user already exist"})
+            return
         }
-
+ console.log("hit",req.body)
         const user = await User.create({
             name,
             password,
@@ -45,6 +47,7 @@ try {
         })
     
 } catch (error) {
+    console.log("error is comming",error)
     res.status(500).json({message:"server error",error})
     
 }    
@@ -56,6 +59,7 @@ export const login = async( req:Request,res:Response): Promise<void> => {
     
         if(!email || !password){
             res.status(400).json({message: "please fill the required fields"})
+            return
         }
     
         // find user include password
@@ -69,7 +73,7 @@ export const login = async( req:Request,res:Response): Promise<void> => {
         const isMatch = await bcrypt.compare(password,user.password as string);
         if(!isMatch){
             res.status(400).json({message:"Invalid email or password"})
-    
+             return
         }
         const token =  generateToken(user._id.toString())
     
@@ -86,6 +90,8 @@ export const login = async( req:Request,res:Response): Promise<void> => {
                     },
                 })
        } catch (error) {
+            console.log("error is comming",error)
+
             res.status(500).json({message:"server error",error})
 }
 }
