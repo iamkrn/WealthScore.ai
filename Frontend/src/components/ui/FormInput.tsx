@@ -1,3 +1,8 @@
+type Option = {
+  label: string;
+  value: string;
+};
+
 type Props = {
   label: string;
   placeholder?: string;
@@ -5,6 +10,7 @@ type Props = {
   onChange: (val: string) => void;
   icon?: string;
   isMoney?: boolean;
+  options?: Option[];
 };
 
 export default function FormInput({
@@ -14,6 +20,7 @@ export default function FormInput({
   onChange,
   isMoney = false,
   icon,
+  options,
 }: Props) {
   return (
     <div>
@@ -23,25 +30,45 @@ export default function FormInput({
 
       <div className="relative">
 
-        {isMoney && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            ₹
-          </span>
-        )}
+        {/* Dropdown mode */}
+        {options ? (
+          <select
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full p-2 rounded bg-[#0b0f19] border border-gray-700 text-white appearance-none cursor-pointer"
+          >
+            <option value="" disabled>
+              Select {label}
+            </option>
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
 
-        {icon && !isMoney && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-            {icon}
-          </span>
+        ) : (
+          // Input mode
+          <>
+            {isMoney && (
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                ₹
+              </span>
+            )}
+            {icon && !isMoney && (
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                {icon}
+              </span>
+            )}
+            <input
+              value={value}
+              placeholder={placeholder || `Enter ${label}`}
+              onChange={(e) => onChange(e.target.value)}
+              className={`w-full p-2 rounded bg-[#0b0f19] border border-gray-700 text-white
+              ${isMoney || icon ? "pl-8" : ""}`}
+            />
+          </>
         )}
-
-        <input
-          value={value}
-          placeholder={placeholder || `Enter ${label}`}
-          onChange={(e) => onChange(e.target.value)}
-          className={`w-full p-2 rounded bg-[#0b0f19] border border-gray-700 text-white 
-          ${isMoney || icon ? "pl-8" : ""}`}
-        />
       </div>
     </div>
   );

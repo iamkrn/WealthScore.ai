@@ -17,17 +17,19 @@ export const protect = async(
 ):Promise<void> => {
     try {
         const authHeader = req.headers.authorization;
-    
+        
         if(!authHeader || !authHeader.startsWith("Bearer ")){
             res.status(400).json({message:"token not found"})
             return;
         }
-        const token = authHeader.split("")[1];
-    
+        const token = authHeader.split(" ")[1];
+        
         const decoded  = jwt.verify(
             token,
             process.env.JWT_SECRET as string
         ) as {id:string};
+        console.log("Decoded:", decoded);
+
     
             const user = await User.findById(decoded.id);
         if (!user) {
@@ -45,6 +47,8 @@ export const protect = async(
         next();
     
     } catch (error) {
+          console.error("JWT Verify Error:", error);
+
     res.status(401).json({ message: "Token invalid or expire " });
 
     }
